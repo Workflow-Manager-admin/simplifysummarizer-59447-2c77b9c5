@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import styles from "./page.module.css";
 
 // Color palette
@@ -59,24 +59,43 @@ export default function SimplifySummarizerMain() {
    */
   const [input, setInput] = useState("");
   const [bullets, setBullets] = useState<string[]>([]);
+  const [mounted, setMounted] = useState(false);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleSummarize = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setBullets(summarizeText(input));
-    setTimeout(() => {
-      // Scroll to results if out of view (for mobile)
-      if (
-        bullets.length === 0 &&
-        textAreaRef.current &&
-        typeof window !== "undefined"
-      ) {
-        textAreaRef.current.blur();
-        document
-          .getElementById("summary-bullets")
-          ?.scrollIntoView({ behavior: "smooth", block: "center" });
-      }
-    }, 120);
+    const newBullets = summarizeText(input);
+    setBullets(newBullets);
+    
+    // Only run client-side effects after component mounts
+    if (typeof window !== "undefined") {
+      setTimeout(() => {
+        // Scroll to results if out of view (for mobile)
+        if (
+          newBullets.length > 0 &&
+          textAreaRef.current
+        ) {
+          textAreaRef.current.blur();
+          const resultsElement = document.getElementById("summary-bullets");
+          if (resultsElement) {
+            resultsElement.scrollIntoView({ behavior: "smooth", block: "nearest" });
+          }
+        }
+      }, 120);
+    }
+  };
+=======
+
+  const handleClear = () => {
+    setInput("");
+    setBullets([]);
+    if (typeof window !== "undefined" && textAreaRef.current) {
+      textAreaRef.current.focus();
+    }
   };
 
   const handleClear = () => {
@@ -124,7 +143,7 @@ export default function SimplifySummarizerMain() {
               >
                 Summarize
               </button>
-              {input && (
+              {input && mounted && (
                 <button
                   type="button"
                   className={styles.clearBtn}

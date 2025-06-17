@@ -1,7 +1,11 @@
 .bgDecor {
-  min-height: 100vh;
+  height: 100vh;
   width: 100vw;
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
+  margin: 0;
+  padding: 0;
   background: radial-gradient(circle at 90% 15%, #2196F315 0, #fff0 60%),
     radial-gradient(circle at 8% 90%, #4CAF5022 0, #fff0 50%),
     var(--background, #fafcff);
@@ -10,7 +14,8 @@
   flex-direction: column;
   align-items: center;
   box-sizing: border-box;
-  padding: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .centeredFlex {
@@ -19,8 +24,8 @@
   flex-direction: column;
   align-items: center;
   min-height: 100vh;
-  justify-content: flex-start;
-  padding-top: 5vw;
+  justify-content: center;
+  padding: 2rem 1rem;
   box-sizing: border-box;
 }
 
@@ -33,10 +38,10 @@
   border-radius: 1.5rem;
   border: 2.2px solid var(--color-primary, #4CAF50);
   padding: 2.2rem 2rem 1.3rem 2rem;
-  width: 98vw;
+  width: calc(100vw - 2rem);
   max-width: 500px;
   margin: 0 auto;
-  margin-bottom: 2.2rem;
+  margin-bottom: 1rem;
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -273,10 +278,17 @@
 }
 
 @media (max-width: 640px) {
+  .centeredFlex {
+    padding: 1rem 0.5rem;
+    justify-content: flex-start;
+    padding-top: 2rem;
+  }
   .cardPanel {
-    padding: 1.14rem 0.3rem 1.19rem 0.3rem;
-    max-width: 98vw;
+    padding: 1.5rem 1rem 1.2rem 1rem;
+    width: calc(100vw - 1rem);
+    max-width: none;
     border-radius: 1.22em;
+    margin-bottom: 0.5rem;
   }
   .title {
     font-size: 1.43rem;
@@ -286,5 +298,6 @@
   }
   .footer {
     font-size: 0.94rem;
+    padding: 0.5rem 0.5rem 1rem 0.5rem;
   }
 }
